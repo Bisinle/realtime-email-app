@@ -5,12 +5,15 @@ if (process.env.NODE_ENV !== "production") {
 
 //^ importing dependencies------------------------------------------------->
 const express = require("express");
+const cors = require("cors");
 const connectToDb = require("./config/connectToDb");
 
-//^initialize the app------------------------------------------------->
+//^initialize an express app------------------------------------------------->
 const app = express();
+
+//^configure express app ------------------------------------------------->
 app.use(express.json());
-const Email = require("./models/emailModel");
+app.use(cors());
 const usersController = require("./controllers/usersController");
 const emailsController = require("./controllers/emailsController");
 

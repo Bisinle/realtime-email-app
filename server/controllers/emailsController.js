@@ -73,9 +73,9 @@ const deleteEmail = async (req, res) => {
 };
 
 module.exports = {
-  fetchAllemails: fetchAllemails,
-  createEmail: createEmail,
-  updateEmail: updateEmail,
-  fetchEmailById: fetchEmailById,
-  deleteEmail: deleteEmail,
+  fetchAllemails,
+  createEmail,
+  updateEmail,
+  fetchEmailById,
+  deleteEmail,
 };
