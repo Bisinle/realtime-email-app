@@ -131,6 +131,20 @@ app.put("/emails/:id", async (req, res) => {
   }
 });
 
+
+//^update emails Route------------------------------------------------->
+app.delete("/emails/:id", async (req, res) => {
+  try {
+    const deletedEmail = await Email.findByIdAndDelete(req.params.id);
+    if (!deletedEmail) {
+      return res.status(404).json({ message: "email not found" });
+    }
+    res.json({ email: deletedEmail });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
 //^ listening the port ------------------------------------------------->
 app.listen(process.env.APP_PORT, () => {
   console.log("server started");
