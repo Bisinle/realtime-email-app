@@ -21,7 +21,13 @@ app.get("/", (req, res) => {
   res.json("server started");
 });
 
-//^ post to users Route------------------------------------------------>
+//^get all users Route------------------------------------------------->
+app.get("/users", async (req, res) => {
+  const users = await User.find();
+  res.json({ users: users });
+});
+
+//^ find user byId Route------------------------------------------------>
 app.get("/users/:id", async (req, res) => {
   const userId = req.params.id;
   const user = await User.findById(userId)
@@ -49,6 +55,23 @@ app.post("/users", async (req, res) => {
   });
   res.json({ user: user });
 });
+
+
+//^update emails Route------------------------------------------------->
+app.put("/users/:id", async (req, res) => {
+  try {
+    const updatUser = await User.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
+    if (!updatUser) {
+      return res.status(404).json({ message: "user not found" });
+    }
+    res.json({ user: updatUser });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
 
 //^ post to emails Route------------------------------------------------->
 // app.post("/emails", async (req, res) => {
@@ -92,6 +115,7 @@ app.post("/emails", async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 });
+
 //^update emails Route------------------------------------------------->
 app.put("/emails/:id", async (req, res) => {
   try {
