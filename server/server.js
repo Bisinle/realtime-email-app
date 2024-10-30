@@ -10,151 +10,25 @@ const connectToDb = require("./config/connectToDb");
 //^initialize the app------------------------------------------------->
 const app = express();
 app.use(express.json());
-const User = require("./models/userModel");
 const Email = require("./models/emailModel");
+const usersController = require("./controllers/usersController");
+const emailsController = require("./controllers/emailsController");
 
 //^ connect to db ------------------------------------------------->
 connectToDb();
 
-//^ home Route------------------------------------------------->
-app.get("/", (req, res) => {
-  res.json("server started");
-});
+//^ user routes ----------------------------------->
+app.get("/users", usersController.fetchUsers);
+app.get("/users/:id", usersController.fetchUserById);
+app.put("/users/:id", usersController.updateUser);
+app.post("/users", usersController.createUser);
 
-//^get all users Route------------------------------------------------->
-app.get("/users", async (req, res) => {
-  const users = await User.find();
-  res.json({ users: users });
-});
-
-//^ find user byId Route------------------------------------------------>
-app.get("/users/:id", async (req, res) => {
-  const userId = req.params.id;
-  const user = await User.findById(userId)
-    .populate("sentEmails")
-    .populate("receivedEmails");
-
-  if (!user) {
-    return res.status(404).json({ error: "User not found" });
-  }
-  res.json({ user: user });
-});
-
-//^ post to users Route------------------------------------------------>
-app.post("/users", async (req, res) => {
-  const email = req.body.email;
-  const password = req.body.password;
-  const firstName = req.body.firstName;
-  const lastName = req.body.lastName;
-
-  const user = await User.create({
-    email: email,
-    password: password,
-    firstName: firstName,
-    lastName: lastName,
-  });
-  res.json({ user: user });
-});
-
-//^update emails Route------------------------------------------------->
-app.put("/users/:id", async (req, res) => {
-  try {
-    const updatUser = await User.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-    });
-    if (!updatUser) {
-      return res.status(404).json({ message: "user not found" });
-    }
-    res.json({ user: updatUser });
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-});
-
-//^ post to emails Route------------------------------------------------->
-// app.post("/emails", async (req, res) => {
-//   const sender = req.body.sender;
-//   const recipients = [req.body.recipients];
-//   const subject = req.body.subject;
-//   const body = req.body.body;
-//   const isRead = req.body.isRead;
-
-//     const email =({
-//       sender: sender,
-//       recipients: recipients,
-//       subject: subject,
-//       body: body,
-//       isRead: isRead,
-//     });
-
-//   res.json({ email: email });
-// });
-app.post("/emails", async (req, res) => {
-  try {
-    const recipients = Array.isArray(req.body.recipients)
-      ? req.body.recipients
-      : [req.body.recipients];
-
-    const email = await Email.create({
-      sender: req.body.sender,
-      recipients: recipients,
-      subject: req.body.subject,
-      body: req.body.body,
-      isRead: req.body.isRead,
-    });
-
-    // Populate the sender and recipients details
-    // const populatedEmail = await Email.findById(email._id)
-    //   .populate("sender", "firstName lastName email")
-    //   .populate("recipients", "firstName lastName email");
-
-    res.status(201).json({ email: email });
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-});
-
-//^update emails Route------------------------------------------------->
-app.put("/emails/:id", async (req, res) => {
-  try {
-    const updatEmail = await Email.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-    });
-    if (!updatEmail) {
-      return res.status(404).json({ message: "email not found" });
-    }
-    res.json({ email: updatEmail });
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-});
-
-
-//^ get email byID route------------------------------------------------->
-app.get("/emails/:id", async (req, res) => {
-  try {
-    const email = await Email.findById(req.params.id);
-    if (!email) {
-      return res.status(404).json({ message: "email not found" });
-    }
-    res.json({ email: email });
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-});
-
-//^Delete emails Route------------------------------------------------->
-app.delete("/emails/:id", async (req, res) => {
-  try {
-    const deletedEmail = await Email.findByIdAndDelete(req.params.id);
-    if (!deletedEmail) {
-      return res.status(404).json({ message: "email not found" });
-    }
-    res.json({ message: "email deleted successfully" });
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-});
+//^ emails routes ----------------------------------->
+app.get("/emails", emailsController.fetchAllemails);
+app.get("/emails/:id", emailsController.fetchEmailById);
+app.post("/emails", emailsController.createEmail);
+app.put("/emails/:id", emailsController.updateEmail);
+app.delete("/emails/:id", emailsController.deleteEmail);
 
 //^ listening the port ------------------------------------------------->
 app.listen(process.env.APP_PORT, () => {
