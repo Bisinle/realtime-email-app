@@ -56,7 +56,6 @@ app.post("/users", async (req, res) => {
   res.json({ user: user });
 });
 
-
 //^update emails Route------------------------------------------------->
 app.put("/users/:id", async (req, res) => {
   try {
@@ -71,7 +70,6 @@ app.put("/users/:id", async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 });
-
 
 //^ post to emails Route------------------------------------------------->
 // app.post("/emails", async (req, res) => {
@@ -132,14 +130,27 @@ app.put("/emails/:id", async (req, res) => {
 });
 
 
-//^update emails Route------------------------------------------------->
+//^ get email byID route------------------------------------------------->
+app.get("/emails/:id", async (req, res) => {
+  try {
+    const email = await Email.findById(req.params.id);
+    if (!email) {
+      return res.status(404).json({ message: "email not found" });
+    }
+    res.json({ email: email });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+//^Delete emails Route------------------------------------------------->
 app.delete("/emails/:id", async (req, res) => {
   try {
     const deletedEmail = await Email.findByIdAndDelete(req.params.id);
     if (!deletedEmail) {
       return res.status(404).json({ message: "email not found" });
     }
-    res.json({ email: deletedEmail });
+    res.json({ message: "email deleted successfully" });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
