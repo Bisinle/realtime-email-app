@@ -8,17 +8,6 @@ const fetchUsers = async (req, res) => {
 };
 
 // //^ find user byId Route------------------------------------------------>
-// const fetchUserById = async (req, res) => {
-//   const userId = req.params.id;
-//   const user = await User.findById(userId)
-//     .populate("sentEmails")
-//     .populate("receivedEmails");
-
-//   if (!user) {
-//     return res.status(404).json({ error: "User not found" });
-//   }
-//   res.json({ user: user });
-// };
 const fetchUserById = async (req, res) => {
     const userId = req.params.id;
     const user = await User.findById(userId);
