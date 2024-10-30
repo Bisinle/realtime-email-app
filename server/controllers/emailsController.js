@@ -20,6 +20,8 @@ const createEmail = async (req, res) => {
       isRead: req.body.isRead,
     });
 
+
+
     // Populate the sender and recipients details
     // const populatedEmail = await Email.findById(email._id)
     //   .populate("sender", "firstName lastName email")

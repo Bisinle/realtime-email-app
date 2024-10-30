@@ -1,28 +1,75 @@
 const User = require("../models/userModel");
+const Email = require("../models/emailModel");
 
-
-
-
-
-//^get all users Route------------------------------------------------->
+// //^get all users Route------------------------------------------------->
 const fetchUsers = async (req, res) => {
   const users = await User.find();
   res.json({ users: users });
 };
 
-//^ find user byId Route------------------------------------------------>
+// //^ find user byId Route------------------------------------------------>
+// const fetchUserById = async (req, res) => {
+//   const userId = req.params.id;
+//   const user = await User.findById(userId)
+//     .populate("sentEmails")
+//     .populate("receivedEmails");
+
+//   if (!user) {
+//     return res.status(404).json({ error: "User not found" });
+//   }
+//   res.json({ user: user });
+// };
 const fetchUserById = async (req, res) => {
-  const userId = req.params.id;
-  const user = await User.findById(userId)
-    .populate("sentEmails")
-    .populate("receivedEmails");
-
-  if (!user) {
-    return res.status(404).json({ error: "User not found" });
-  }
-  res.json({ user: user });
-};
-
+    const userId = req.params.id;
+    const user = await User.findById(userId);
+  
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+  
+    const sentEmails = await Email.find({ sender: userId })
+      .populate('recipients', 'firstName lastName email');
+  
+    const receivedEmails = await Email.find({ recipients: userId })
+      .populate('sender', 'firstName lastName email');
+  
+    const formatSentEmail = email => ({
+      _id: email._id,
+      subject: email.subject,
+      body: email.body,
+      isRead: email.isRead,
+      createdAt: email.createdAt,
+      recipients: email.recipients.map(r => ({
+        _id: r._id,
+        name: `${r.firstName} ${r.lastName}`,
+        email: r.email
+      }))
+    });
+  
+    const formatReceivedEmail = email => ({
+      _id: email._id,
+      subject: email.subject,
+      body: email.body,
+      isRead: email.isRead,
+      createdAt: email.createdAt,
+      sender: {
+        _id: email.sender._id,
+        name: `${email.sender.firstName} ${email.sender.lastName}`,
+        email: email.sender.email
+      }
+    });
+  
+    res.json({
+      user: {
+        _id: user._id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        sentEmails: sentEmails.map(formatSentEmail),
+        receivedEmails: receivedEmails.map(formatReceivedEmail)
+      }
+    });
+  };
 //^ post to users Route------------------------------------------------>
 const createUser = async (req, res) => {
   const email = req.body.email;
