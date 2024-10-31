@@ -9,12 +9,12 @@ import DashBoard from "./views/emails/Inbox";
 import Settings from "./views/Settings";
 
 import ForgotPassword from "./views/Auth/ForgotPassword";
-import Users from "./views/Users";
 import Inbox from "./views/emails/Inbox";
 import SentEmails from "./views/emails/SentEmails";
 import ReceivedEmails from "./views/emails/ReceivedEmails";
 import EmailDetials from "./views/emails/EmailDetials";
 import ComposeEmail from "./views/emails/ComposeEmail";
+import Dashaboard from "./views/Dashboard";
 
 const router = createBrowserRouter([
   {
@@ -44,8 +44,8 @@ const router = createBrowserRouter([
         ],
       },
       {
-        path: "/users",
-        element: <Users />,
+        path: "/dashboard",
+        element: <Dashaboard />,
       },
       {
         path: "/compose-email",
