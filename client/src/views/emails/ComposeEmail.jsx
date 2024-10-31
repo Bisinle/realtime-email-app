@@ -84,7 +84,7 @@ function ComposeEmail() {
     <div className="max-w-4xl mx-auto p-4">
       <div className="bg-white rounded-lg shadow-sm">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-indigo-700 bg-clip-text text-transparent">
+          <h1 className="text-3xl font-bold mt-3 bg-gradient-to-r from-indigo-600 to-indigo-700 bg-clip-text text-transparent">
             Send a Message to Favorite Person
           </h1>
           <div className="mt-2 flex items-center justify-center gap-2 text-gray-600">

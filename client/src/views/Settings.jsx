@@ -1,8 +1,9 @@
 import React from 'react'
+import EmailList from './emails/EmailList'
 
 function Settings() {
   return (
-    <div>Settings</div>
+   <EmailList/>
   )
 }
 
