@@ -35,6 +35,9 @@ const emailModel = require("./models/emailModel");
 //^ connect to db ------------------------------------------------->
 connectToDb();
 
+app.get("/", (req, res) => {
+  res.json("Hello from the server");
+});
 //^ Use the authentication routes
 app.use("/auth", authRoutes);
 
