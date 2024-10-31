@@ -1,53 +1,61 @@
-import React, {
-  createContext,
-  useContext,
-  useState,
-  useCallback,
-  useEffect,
-} from "react";
+import React, { createContext, useContext, useState, useCallback } from "react";
 
-const StateContext = createContext(null);
+const StateContext = createContext(undefined);
 
 export const ContextProvider = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState({});
-  const [token, setToken] = useState(localStorage.getItem("ACCESS_TOKEN"));
-  const [notification, setNotification] = useState("");
-  const [userPosts, setUserPosts] = useState({});
-  const [loading, setLoading] = useState(true);
+  const [currentUser, setCurrentUser] = useState(() => {
+    const savedUser = localStorage.getItem("user");
+    return savedUser ? JSON.parse(savedUser) : null;
+  });
 
-  const DEPLOYED_URL = `realtime-email-jzu1zp5ke-bisinles-projects.vercel.app`;
+  const [token, setToken] = useState(
+    () => localStorage.getItem("ACCESS_TOKEN") || null
+  );
+
+  const [notification, setNotification] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const setTokenAndStorage = useCallback((newToken) => {
-    setToken(newToken);
     if (newToken) {
       localStorage.setItem("ACCESS_TOKEN", newToken);
+      setToken(newToken);
     } else {
       localStorage.removeItem("ACCESS_TOKEN");
+      localStorage.removeItem("user");
+      setToken(null);
+      setCurrentUser(null);
     }
   }, []);
 
-  const showNotification = useCallback((message) => {
+  const updateCurrentUser = useCallback((userData) => {
+    if (userData) {
+      localStorage.setItem("user", JSON.stringify(userData));
+      setCurrentUser(userData);
+    }
+  }, []);
+
+  // Notification system
+  const showNotification = useCallback((message, duration = 2000) => {
     setNotification(message);
-    setTimeout(() => setNotification(""), 2000);
+    const timer = setTimeout(() => {
+      setNotification("");
+    }, duration);
+    return () => clearTimeout(timer);
   }, []);
 
-  const updateUserPosts = useCallback((posts) => {
-    setUserPosts(posts);
-    // setLoading(!posts);
-  }, []);
-
+  // Context value object
   const contextValue = {
+    // Auth state
     currentUser,
-    setCurrentUser,
+    setCurrentUser: updateCurrentUser,
     token,
     setToken: setTokenAndStorage,
+
+    // UI state
     notification,
     showNotification,
-    userPosts,
-    setUserPosts: updateUserPosts,
     loading,
     setLoading,
-    DEPLOYED_URL,
   };
 
   return (
@@ -57,10 +65,16 @@ export const ContextProvider = ({ children }) => {
   );
 };
 
+// Custom hook with type checking
 export const useStateContext = () => {
   const context = useContext(StateContext);
-  if (!context) {
+
+  if (context === undefined) {
     throw new Error("useStateContext must be used within a ContextProvider");
   }
+
   return context;
 };
+
+// Export the context for testing purposes
+export { StateContext };

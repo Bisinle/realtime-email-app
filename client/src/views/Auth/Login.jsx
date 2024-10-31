@@ -19,16 +19,13 @@ export default function Login() {
       email: emailRef.current.value,
       password: passwordRef.current.value,
     };
-    console.log("in submit login");
 
     try {
       const response = await axiosAuth.post("/login", credentials);
       const { user, token } = response.data;
-      console.log(response);
-
+      // localStorage.setItem("user", JSON.stringify(user));
       setCurrentUser(user);
       setToken(token);
-      localStorage.setItem("user", JSON.stringify(user));
       navigate("/dashboard");
     } catch (err) {
       const response = err.response;
