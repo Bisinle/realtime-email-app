@@ -7,8 +7,7 @@ function App() {
 
     return (
         <div className=" bg-black">
-            <h1 className=" text-yellow-900">react laraaa</h1>
-            <h1 className=" text-green-900">react laraaa</h1>
+            
         </div>
     );
 }
