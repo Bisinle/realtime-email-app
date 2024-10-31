@@ -23,7 +23,7 @@ export default function Login() {
         console.log("in submit login");
 
         try {
-            const response = await axiosAuth.post("auth/login", credentials);
+            const response = await axiosAuth.post("/login", credentials);
             const { user, token } = response.data;
             console.log(response);
 
@@ -42,7 +42,7 @@ export default function Login() {
         <form onSubmit={onSubmit}>
             <h1 className="title">Login into your account</h1>
 <h1>abdiwadud.mohamedd@gmail.com</h1>
-<h1>passowrd</h1>
+<h1>password</h1>
             {message && (
                 <div className="alert">
                     <p>{message}</p>

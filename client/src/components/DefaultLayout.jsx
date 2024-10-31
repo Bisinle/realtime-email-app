@@ -5,11 +5,12 @@ import SideBar from "./SideBar";
 import Header from "./Header";
 import MainContent from "./MainContent";
 import { de } from "date-fns/locale";
-import { axiosApi } from "../axiosClient";
+import { axiosAuth, axiosApi } from "../axiosClient";
 
 export default function DefaultLayout() {
     const { currentUser, token, setCurrentUser, setToken, notification } =
         useStateContext();
+// console.log(currentUser);
 
     if (!token) {
         return <Navigate to="/login" />;
@@ -17,7 +18,7 @@ export default function DefaultLayout() {
 
     const onLogout = (ev) => {
         ev.preventDefault();
-        axiosApi.post("/logout").then(() => {
+        axiosAuth.post("/logout").then(() => {
             setCurrentUser({});
             setToken(null);
             localStorage.removeItem("user");
@@ -25,7 +26,7 @@ export default function DefaultLayout() {
     };
 
     useEffect(() => {
-        axiosApi.get("/user").then(({ data }) => {
+        axiosApi.get("/users").then(({ data }) => {
             setCurrentUser(data);
         });
     }, []);

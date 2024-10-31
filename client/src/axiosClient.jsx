@@ -1,4 +1,5 @@
 import axios from "axios";
+import { redirect } from "react-router-dom";
 
 // Create axios instances with base URLs
 export const axiosAuth = axios.create({
@@ -40,10 +41,10 @@ const addResponseInterceptor = (axiosInstance) => {
         // Handle unauthorized access
         if (error.response.status === 401) {
           localStorage.removeItem("token");
-          // You might want to redirect to login page here
+          // redirect("/login");
         }
 
-        // Handle other errors
+      
         console.error("API Error:", error.response.data);
       }
       return Promise.reject(error);

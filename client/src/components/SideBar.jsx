@@ -16,18 +16,18 @@ const SideBar = () => {
       </div>
       <nav className="flex flex-col gap-2 relative">
         <Link
-          to="/dashboard"
+          to="/inbox/receivedEmails"
           className="flex items-center py-2 px-4 text-gray-300 hover:bg-indigo-600 rounded transition duration-150 ease-in-out"
         >
           <MdDashboard className="text-xl mr-3 flex justify-center items-center text-white" />
-          Dashboard
+          Inbox
         </Link>
         <Link
-          to="/home"
+          to="/users"
           className="flex items-center py-2 px-4 mt-2 text-gray-300 hover:bg-indigo-600 rounded transition duration-150 ease-in-out"
         >
           <IoHome className="text-xl mr-3 flex justify-center items-center text-white" />
-          Home
+          Users
         </Link>
         <Link
           to="/posts"
