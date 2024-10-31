@@ -3,7 +3,7 @@
 - Description
 
   - A real-time email application built with MERN stack
-  - Features instant notifications and real-time message delivery
+  - Features instant Email update and real-time Email delivery
   - Full user authentication system
   - Clean and modern UI with Tailwind CSS
 
