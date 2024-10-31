@@ -65,20 +65,20 @@ console.log(email);
             {/* Sender Info */}
             <div className="flex items-center text-gray-600">
               <User className="w-5 h-5 mr-3 text-indigo-500" />
-              <span className="font-medium mr-2">From:</span>
+              <span className="font-medium mr-2"> From:</span>
               <span className="text-gray-800">
-                {isCurrentUserSender ? "You" : email.sender.firstName} <span className=" underline">-- {email.sender.email} --</span>
+                <span className=" ">You</span>
               </span>
             </div>
 
             {/* Recipient Info */}
             <div className="flex items-center text-gray-600">
               <Mail className="w-5 h-5 mr-3 text-indigo-500" />
-              <span className="font-medium mr-2">To:</span>
+              <span className="font-medium mr-2"> To:</span>
               <span className="text-gray-800">
                 {isCurrentUserSender 
-                  ? email.recipients.join(", ")
-                  : "You"}
+                  ? "To"
+                  : email.sender.firstName}
               </span>
             </div>
 

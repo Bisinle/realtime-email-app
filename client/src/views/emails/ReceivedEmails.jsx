@@ -12,6 +12,8 @@ function ReceivedEmails() {
       </div>
     );
   }
+  console.log('received----------------->',receivedEmails);
+  
 
 
   return (
