@@ -30,14 +30,7 @@ function Inbox() {
     }
   };
 
-  // useEffect(() => {
-  //   const currentUser = JSON.parse(localStorage.getItem("user"));
-  //   const currentUserId = currentUser?._id;
 
-  //   if (currentUserId) {
-  //     fetchUserData(currentUserId);
-  //   }
-  // }, []);
 
   useEffect(() => {
     // Get current user

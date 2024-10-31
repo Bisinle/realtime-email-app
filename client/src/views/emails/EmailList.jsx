@@ -3,7 +3,6 @@ import { axiosApi } from "../../axiosClient";
 import { Eye, Pencil, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
-const ITEMS_PER_PAGE = 5;
 
 const EmailList = () => {
   const [emails, setEmails] = useState([]);
@@ -92,7 +91,9 @@ const EmailList = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-64">Loading...</div>
+      <div className="flex items-center justify-center h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
     );
   }
 
