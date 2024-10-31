@@ -1,1 +1,5 @@
-.env  git commit -m "Add .gitignore and remove .env file from history"git commit -m "Add .gitignore and remove .env file from history"
+.env
+*/.env
+
+server/node_modules
+client/node_modules
