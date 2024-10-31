@@ -19,7 +19,7 @@ app.use(cors());
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3001",
+    origin: "http://localhost:3000",
     methods: ["GET", "POST"],
   },
 });
@@ -30,7 +30,7 @@ app.use(express.json());
 app.use(cors());
 const usersController = require("./controllers/usersController");
 const emailsController = require("./controllers/emailsController");
-const emailModel = require("../models/emailModel");
+const emailModel = require("./models/emailModel");
 
 //^ connect to db ------------------------------------------------->
 connectToDb();
@@ -57,9 +57,15 @@ io.on("connection", (socket) => {
   socket.on("join", (userId) => {
     console.log(`User ${userId} joining their room`);
     socket.join(`user_${userId}`);
+   // client.set(userId, socket.id);
     // Send test notification
     socket.emit("connected", { message: "You are connected!" });
   });
+  socket.on("send", async(data)=>{
+    socket.emit("EMAIL_DATA", {
+      data: data
+    })
+  })
 
   socket.on("disconnect", () => {
     console.log("User disconnected:", socket.id);
@@ -70,4 +76,17 @@ server.listen(process.env.APP_PORT, () => {
   console.log(`Server running on port ${process.env.APP_PORT}`);
 });
 
+const changeStream = emailModel.watch();
+
+changeStream.on("change", (change)=>{
+  if(change.operationType === "insert"){
+    const email = change.fullDocument;
+    console.log(email, "new console log");
+    io.to(`user_${email.recipient}`).emit("send", email);
+  }
+})
+
+
+
 app.set("io", io);
+

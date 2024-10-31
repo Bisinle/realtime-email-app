@@ -1,5 +1,6 @@
 const Email = require("../models/emailModel");
 
+
 //^get all users Route------------------------------------------------->
 const fetchAllemails = async (req, res) => {
   const emails = await Email.find();
@@ -29,12 +30,19 @@ const createEmail = async (req, res) => {
       recipients.forEach((recipientId) => {
         const room = `user_${recipientId}`;
         console.log("Emitting newEmail to room:", room);
-        io.to(room).emit("newEmail", {
+        io.to(room).emit("send", {
           id: email._id,
           subject: email.subject,
           sender: req.body.sender,
           body: req.body.body,
         });
+        // broadcast(room, {
+        //   id: email._id,
+        //   subject: email.subject,
+        //   sender: req.body.sender,
+        //   body: req.body.body,
+        // })
+       
       });
 
       console.log("Email created and notifications sent");
