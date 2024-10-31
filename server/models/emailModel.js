@@ -7,11 +7,13 @@ const emailSchema = new Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
+      trim: true,
     },
     recipients: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
+        trim: true,
       },
     ],
     subject: {

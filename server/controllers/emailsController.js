@@ -20,12 +20,15 @@ const createEmail = async (req, res) => {
       isRead: req.body.isRead,
     });
 
-
-
-    // Populate the sender and recipients details
-    // const populatedEmail = await Email.findById(email._id)
-    //   .populate("sender", "firstName lastName email")
-    //   .populate("recipients", "firstName lastName email");
+    const io = req.app.get("io");
+    //^ neotify qofkasta
+    recipients.forEach((recipientId) => {
+      io.to(`user_${recipientId}`).emit("newEmail", {
+        id: email._id,
+        subject: email.subject,
+        sender: req.body.sender,
+      });
+    });
 
     res.status(201).json({ email: email });
   } catch (error) {
@@ -51,10 +54,17 @@ const updateEmail = async (req, res) => {
 //^ get email byID route------------------------------------------------->
 const fetchEmailById = async (req, res) => {
   try {
-    const email = await Email.findById(req.params.id);
+    let email = await Email.findById(req.params.id);
     if (!email) {
       return res.status(404).json({ message: "email not found" });
     }
+    //^a bit hectic but gets the job done
+    email =
+      email.sender.toString() === req.params.id.toString()
+        ? await email.populate("recipients", "firstName lastName email")
+        : await email.populate("sender", "firstName lastName email");
+    const is_receiver =
+      email.recipients.toString() === req.params.id.toString();
     res.json({ email: email });
   } catch (error) {
     res.status(400).json({ message: error.message });

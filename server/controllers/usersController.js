@@ -4,7 +4,10 @@ const Email = require("../models/emailModel");
 // //^get all users Route------------------------------------------------->
 const fetchUsers = async (req, res) => {
   const users = await User.find();
-  res.json({ users: users });
+  if (!users) {
+    return res.status(404).json({ error: "Users not found" });
+  }
+  res.json({ users });
 };
 
 // //^ find user byId Route------------------------------------------------>
