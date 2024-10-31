@@ -8,7 +8,7 @@ const SideBar = () => {
   return (
     <aside className="w-64 bg-indigo-700 text-white p-6">
       <div className="mb-8">
-        <h2 className="text-2xl font-bold">Your App</h2>
+        <h2 className="text-2xl font-bold">Email-Me</h2>
       </div>
       <nav className="flex flex-col gap-2 relative">
         <Link
