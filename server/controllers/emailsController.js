@@ -8,6 +8,8 @@ const fetchAllemails = async (req, res) => {
 
 const createEmail = async (req, res) => {
   try {
+    const io = req.app.get("socketio");
+
     const recipients = Array.isArray(req.body.recipients)
       ? req.body.recipients
       : [req.body.recipients];
@@ -19,17 +21,24 @@ const createEmail = async (req, res) => {
       body: req.body.body,
       isRead: req.body.isRead,
     });
+    //^ --------------------------------------------------------------------
+    if (io) {
+      console.log("Attempting to notify recipients:", recipients);
 
-    const io = req.app.get("io");
-    //^ neotify qofkasta
-    recipients.forEach((recipientId) => {
-      io.to(`user_${recipientId}`).emit("newEmail", {
-        id: email._id,
-        subject: email.subject,
-        sender: req.body.sender,
+      // Notify each recipient
+      recipients.forEach((recipientId) => {
+        const room = `user_${recipientId}`;
+        console.log("Emitting newEmail to room:", room);
+        io.to(room).emit("newEmail", {
+          id: email._id,
+          subject: email.subject,
+          sender: req.body.sender,
+          body: req.body.body,
+        });
       });
-    });
 
+      console.log("Email created and notifications sent");
+    }
     res.status(201).json({ email: email });
   } catch (error) {
     res.status(400).json({ error: error.message });

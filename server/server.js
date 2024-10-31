@@ -6,7 +6,7 @@ if (process.env.NODE_ENV !== "production") {
 //^ importing dependencies------------------------------------------------->
 const express = require("express");
 const http = require("http");
-const socketIO = require("socket.io");
+const { Server } = require("socket.io");
 const cors = require("cors");
 const connectToDb = require("./config/connectToDb");
 const authRoutes = require("./auth/authRoutes");
@@ -14,37 +14,23 @@ const authRoutes = require("./auth/authRoutes");
 //^initialize an express app------------------------------------------------->
 const app = express();
 
-//^ Use the cors middleware
 app.use(cors());
 
-//^ socket server ----------------------------------->
 const server = http.createServer(app);
-const io = socketIO(server, {
+const io = new Server(server, {
   cors: {
     origin: "http://localhost:3001",
     methods: ["GET", "POST"],
   },
 });
+app.set("socketio", io);
 
-//^ Socket.IO connection handling ------------------------------------>
-io.on("connection", (socket) => {
-  console.log("Client connected");
-
-  //^ Handle joining user-specific room, i will definitely enjoy implemening this
-  // socket.on("join", (userId) => {
-  //   socket.join(`user_${userId}`);
-  //   console.log(`User ${userId} joined their room`);
-  // });
-
-  socket.on("disconnect", () => {
-    console.log("Client disconnected");
-  });
-});
 //^configure express app ------------------------------------------------->
 app.use(express.json());
 app.use(cors());
 const usersController = require("./controllers/usersController");
 const emailsController = require("./controllers/emailsController");
+const emailModel = require("../models/emailModel");
 
 //^ connect to db ------------------------------------------------->
 connectToDb();
@@ -65,12 +51,23 @@ app.post("/emails", emailsController.createEmail);
 app.put("/emails/:id", emailsController.updateEmail);
 app.delete("/emails/:id", emailsController.deleteEmail);
 
-//^ listening the port ------------------------------------------------->
-// app.listen(process.env.APP_PORT, () => {
-//   console.log("server started");
-// });
+io.on("connection", (socket) => {
+  console.log(`User Connected: ${socket.id}`);
+
+  socket.on("join", (userId) => {
+    console.log(`User ${userId} joining their room`);
+    socket.join(`user_${userId}`);
+    // Send test notification
+    socket.emit("connected", { message: "You are connected!" });
+  });
+
+  socket.on("disconnect", () => {
+    console.log("User disconnected:", socket.id);
+  });
+});
+
 server.listen(process.env.APP_PORT, () => {
-  console.log(`Server started on port ${process.env.APP_PORT}`);
+  console.log(`Server running on port ${process.env.APP_PORT}`);
 });
 
 app.set("io", io);

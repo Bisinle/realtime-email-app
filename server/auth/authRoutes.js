@@ -36,7 +36,6 @@ router.post("/register", async (req, res) => {
   }
 });
 router.post("/logout", (req, res) => {
- 
   res.clearCookie("token").send("Logged out successfully");
 });
 
@@ -67,7 +66,7 @@ router.post("/login", async (req, res) => {
       expiresIn: "1h",
     });
 
-    res.json({ token:token,user:user });
+    res.json({ token: token, user: user });
   } catch (error) {
     console.error(error);
     res.status(500).json({
