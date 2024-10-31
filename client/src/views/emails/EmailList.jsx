@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { axiosApi } from "../../axiosClient";
 import { Eye, Pencil, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const ITEMS_PER_PAGE = 5;
 
@@ -15,8 +16,9 @@ const EmailList = () => {
       setLoading(true);
       const response = await axiosApi.get(`/emails?page=${page}`);
       setEmails(response.data.emails);
-      // Assuming you have 20 total emails for this example
-      setTotalPages(Math.ceil(20 / ITEMS_PER_PAGE));
+      const perPage = response.data.itemsPerPage;
+      const totalPages = response.data.totalPages;
+      setTotalPages(Math.ceil(totalPages / perPage));
       setLoading(false);
     } catch (error) {
       console.error("Error fetching emails:", error);
@@ -132,12 +134,12 @@ const EmailList = () => {
                 </td>
                 <td className="py-4 px-6">
                   <div className="flex gap-2">
-                    <button
+                    <Link
                       onClick={() => handleView(email._id)}
                       className="p-1 text-blue-600 hover:bg-blue-50 rounded"
                     >
                       <Eye className="h-5 w-5" />
-                    </button>
+                    </Link>
                     <button
                       onClick={() => handleEdit(email._id)}
                       className="p-1 text-green-600 hover:bg-green-50 rounded"
@@ -179,8 +181,7 @@ const EmailList = () => {
             </button>
 
             <div className="flex space-x-1">{renderPaginationNumbers()}</div>
-
-            <button
+            <span
               onClick={handleNextPage}
               disabled={currentPage === totalPages - 1}
               className={`p-2 rounded-md ${
@@ -190,7 +191,7 @@ const EmailList = () => {
               }`}
             >
               <ChevronRight className="h-5 w-5" />
-            </button>
+            </span>
           </div>
         </div>
       </div>

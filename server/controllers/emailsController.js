@@ -1,10 +1,20 @@
 const Email = require("../models/emailModel");
 
-
 //^get all users Route------------------------------------------------->
 const fetchAllemails = async (req, res) => {
-  const emails = await Email.find();
-  res.json({ emails: emails });
+  const page = req.query.page || 0;
+  const itemsPerPage = 7;
+
+  const totalPages = await Email.countDocuments();
+  const emails = await Email.find()
+    .skip(page * itemsPerPage)
+    .limit(itemsPerPage);
+  console.log(totalPages);
+  res.json({
+    emails: emails,
+    itemsPerPage: itemsPerPage,
+    totalPages: totalPages,
+  });
 };
 
 const createEmail = async (req, res) => {
@@ -42,7 +52,6 @@ const createEmail = async (req, res) => {
         //   sender: req.body.sender,
         //   body: req.body.body,
         // })
-       
       });
 
       console.log("Email created and notifications sent");
