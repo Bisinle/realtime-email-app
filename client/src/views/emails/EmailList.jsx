@@ -109,7 +109,7 @@ const EmailList = () => {
             {emails.map((email) => (
               <tr key={email._id} className="bg-white border-b hover:bg-gray-50">
                 <td className="py-4 px-6">{email.subject}</td>
-                <td className="py-4 px-6">{email.sender}</td>
+                <td className="py-4 px-6">{email.sender.firstName}</td>
                 <td className="py-4 px-6">
                   <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
                     email.isRead 
