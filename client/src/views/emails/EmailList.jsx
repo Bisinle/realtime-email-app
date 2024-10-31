@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { axiosApi } from '../../axiosClient';
-import { Eye, Pencil, Trash2, ChevronLeft, ChevronRight } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import { axiosApi } from "../../axiosClient";
+import { Eye, Pencil, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
 
 const ITEMS_PER_PAGE = 5;
 
@@ -16,10 +16,10 @@ const EmailList = () => {
       const response = await axiosApi.get(`/emails?page=${page}`);
       setEmails(response.data.emails);
       // Assuming you have 20 total emails for this example
-      setTotalPages(Math.ceil(20 / ITEMS_PER_PAGE)); 
+      setTotalPages(Math.ceil(20 / ITEMS_PER_PAGE));
       setLoading(false);
     } catch (error) {
-      console.error('Error fetching emails:', error);
+      console.error("Error fetching emails:", error);
       setLoading(false);
     }
   };
@@ -32,7 +32,7 @@ const EmailList = () => {
     try {
       await axiosApi.get(`/emails/${id}`);
     } catch (error) {
-      console.error('Error viewing email:', error);
+      console.error("Error viewing email:", error);
     }
   };
 
@@ -41,30 +41,30 @@ const EmailList = () => {
       await axiosApi.put(`/emails/${id}`);
       fetchEmails(currentPage);
     } catch (error) {
-      console.error('Error editing email:', error);
+      console.error("Error editing email:", error);
     }
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm('Are you sure you want to delete this email?')) {
+    if (window.confirm("Are you sure you want to delete this email?")) {
       try {
         await axiosApi.delete(`/emails/${id}`);
         fetchEmails(currentPage);
       } catch (error) {
-        console.error('Error deleting email:', error);
+        console.error("Error deleting email:", error);
       }
     }
   };
 
   const handleNextPage = () => {
     if (currentPage < totalPages - 1) {
-      setCurrentPage(prev => prev + 1);
+      setCurrentPage((prev) => prev + 1);
     }
   };
 
   const handlePrevPage = () => {
     if (currentPage > 0) {
-      setCurrentPage(prev => prev - 1);
+      setCurrentPage((prev) => prev - 1);
     }
   };
 
@@ -76,9 +76,9 @@ const EmailList = () => {
           key={i}
           onClick={() => setCurrentPage(i)}
           className={`px-3 py-1 rounded-md mx-1 ${
-            currentPage === i 
-              ? 'bg-indigo-600 text-white' 
-              : 'bg-white text-gray-700 hover:bg-gray-50'
+            currentPage === i
+              ? "bg-indigo-600 text-white"
+              : "bg-white text-gray-700 hover:bg-gray-50"
           }`}
         >
           {i + 1}
@@ -89,7 +89,9 @@ const EmailList = () => {
   };
 
   if (loading) {
-    return <div className="flex justify-center items-center h-64">Loading...</div>;
+    return (
+      <div className="flex justify-center items-center h-64">Loading...</div>
+    );
   }
 
   return (
@@ -107,37 +109,43 @@ const EmailList = () => {
           </thead>
           <tbody>
             {emails.map((email) => (
-              <tr key={email._id} className="bg-white border-b hover:bg-gray-50">
+              <tr
+                key={email._id}
+                className="bg-white border-b hover:bg-gray-50"
+              >
                 <td className="py-4 px-6">{email.subject}</td>
                 <td className="py-4 px-6">{email.sender.firstName}</td>
                 <td className="py-4 px-6">
-                  <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                    email.isRead 
-                      ? 'bg-green-100 text-green-800' 
-                      : 'bg-yellow-100 text-yellow-800'
-                  }`}>
-                    {email.isRead ? 'Read' : 'Unread'}
-                  </span>
+                  <buttont
+                    onClick={() => handleEdit(email._id)}
+                    className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                      email.isRead
+                        ? "bg-green-100 text-green-800"
+                        : "bg-yellow-100 text-yellow-800"
+                    }`}
+                  >
+                    {email.isRead ? "Read" : "Unread"}
+                  </buttont>
                 </td>
                 <td className="py-4 px-6">
                   {new Date(email.createdAt).toLocaleDateString()}
                 </td>
                 <td className="py-4 px-6">
                   <div className="flex gap-2">
-                    <button 
-                      onClick={() => handleView(email._id)} 
+                    <button
+                      onClick={() => handleView(email._id)}
                       className="p-1 text-blue-600 hover:bg-blue-50 rounded"
                     >
                       <Eye className="h-5 w-5" />
                     </button>
-                    <button 
-                      onClick={() => handleEdit(email._id)} 
+                    <button
+                      onClick={() => handleEdit(email._id)}
                       className="p-1 text-green-600 hover:bg-green-50 rounded"
                     >
                       <Pencil className="h-5 w-5" />
                     </button>
-                    <button 
-                      onClick={() => handleDelete(email._id)} 
+                    <button
+                      onClick={() => handleDelete(email._id)}
                       className="p-1 text-red-600 hover:bg-red-50 rounded"
                     >
                       <Trash2 className="h-5 w-5" />
@@ -156,31 +164,29 @@ const EmailList = () => {
               Page {currentPage + 1} of {totalPages}
             </span>
           </div>
-          
+
           <div className="flex items-center space-x-2">
             <button
               onClick={handlePrevPage}
               disabled={currentPage === 0}
               className={`p-2 rounded-md ${
                 currentPage === 0
-                  ? 'text-gray-400 cursor-not-allowed'
-                  : 'text-gray-700 hover:bg-gray-50'
+                  ? "text-gray-400 cursor-not-allowed"
+                  : "text-gray-700 hover:bg-gray-50"
               }`}
             >
               <ChevronLeft className="h-5 w-5" />
             </button>
 
-            <div className="flex space-x-1">
-              {renderPaginationNumbers()}
-            </div>
+            <div className="flex space-x-1">{renderPaginationNumbers()}</div>
 
             <button
               onClick={handleNextPage}
               disabled={currentPage === totalPages - 1}
               className={`p-2 rounded-md ${
                 currentPage === totalPages - 1
-                  ? 'text-gray-400 cursor-not-allowed'
-                  : 'text-gray-700 hover:bg-gray-50'
+                  ? "text-gray-400 cursor-not-allowed"
+                  : "text-gray-700 hover:bg-gray-50"
               }`}
             >
               <ChevronRight className="h-5 w-5" />
