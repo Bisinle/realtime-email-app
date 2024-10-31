@@ -4,7 +4,7 @@ import { axiosApi } from "../../axiosClient";
 import { Mail, Inbox as InboxIcon, Send } from "lucide-react";
 import { useStateContext } from "../../contexts/ContextProvider";
 import { GoBellFill } from "react-icons/go";
-import {io} from 'socket.io-client';
+import { io } from "socket.io-client";
 
 function Inbox() {
   const { socket } = useStateContext(); //^ socket server --------------------------------->
@@ -45,7 +45,7 @@ function Inbox() {
     const currentUserId = currentUser?._id;
 
     // Connect to socket
-    const socket = io("http://localhost:3001", {
+    const socket = io(`${import.meta.env.VITE_API_BASE_URL}`, {
       transports: ["websocket"],
       reconnection: false,
     }); // Your backend port
@@ -77,7 +77,7 @@ function Inbox() {
       socket.disconnect();
     };
   }, []);
-if (loading) {
+  if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>

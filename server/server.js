@@ -19,7 +19,7 @@ app.use(cors());
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: ["http://localhost:3000", process.env.FRONTEND_URL],
     methods: ["GET", "POST"],
   },
 });
@@ -85,7 +85,7 @@ const changeStream = emailModel.watch();
 changeStream.on("change", (change) => {
   if (change.operationType === "insert") {
     const email = change.fullDocument;
-    console.log(email, "new console log");
+    //* console.log(email, "new console log");
     io.to(`user_${email.recipient}`).emit("send", email);
   }
 });
