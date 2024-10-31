@@ -1,12 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
- import {MdDashboard} from "react-icons/md";
-import {
-  
-  IoHome,
-  IoDocument,
-  IoSettingsSharp,
-} from "react-icons/io5";
+import { MdDashboard } from "react-icons/md";
+import { IoHome, IoDocument, IoSettingsSharp } from "react-icons/io5";
+import { FaPlusCircle } from "react-icons/fa";
 
 const SideBar = () => {
   return (
@@ -30,11 +26,11 @@ const SideBar = () => {
           Users
         </Link>
         <Link
-          to="/posts"
-          className="flex items-center py-2 px-4 mt-2 text-gray-300 hover:bg-indigo-600 rounded transition duration-150 ease-in-out"
+          to="/compose-email"
+          className="flex items-center border  py-2 px-4 mt-2 text-gray-300 hover:bg-indigo-600 rounded-full transition duration-150 ease-in-out"
         >
-          <IoDocument className="text-xl mr-3 flex justify-center items-center text-white" />
-          All-Posts
+          <FaPlusCircle className="text-xl mr-3 flex justify-center items-center text-white" />
+          Compose Email
         </Link>
         <Link
           to="/settings"

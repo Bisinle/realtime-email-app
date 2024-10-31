@@ -14,6 +14,7 @@ import Inbox from "./views/emails/Inbox";
 import SentEmails from "./views/emails/SentEmails";
 import ReceivedEmails from "./views/emails/ReceivedEmails";
 import EmailDetials from "./views/emails/EmailDetials";
+import ComposeEmail from "./views/emails/ComposeEmail";
 
 const router = createBrowserRouter([
   {
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
       {
         path: "/users",
         element: <Users />,
+      },
+      {
+        path: "/compose-email",
+        element: <ComposeEmail />,
       },
       {
         path: "/settings",
