@@ -9,7 +9,7 @@ const fetchAllemails = async (req, res) => {
   const emails = await Email.find()
     .skip(page * itemsPerPage)
     .limit(itemsPerPage);
-  console.log(totalPages);
+
   res.json({
     emails: emails,
     itemsPerPage: itemsPerPage,
