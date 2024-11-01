@@ -63,8 +63,9 @@ npm install
    Create .env file in server directory:
 
 ```
+//make sure to create an account in mongoDB and have the url in you .env
 APP_PORT=3001
-MONGODB_URL=mongodb://localhost:27017/your-database
+MONGODB_URL=mongodb://localhost:27017/your-database 
 ```
 
 4. Install Frontend Dependencies
