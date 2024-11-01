@@ -13,9 +13,7 @@ function SentEmails() {
     );
   }
 
-  console.log('-sent---------------',sentEmails);
-  
-
+ 
 
   return (
     <div className="space-y-4">

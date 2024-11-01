@@ -35,34 +35,62 @@ export default function Login() {
     }
   };
   return (
-    <form onSubmit={onSubmit}>
-      <h1 className="title">Login into your account</h1>
-     
+    <form onSubmit={onSubmit} className="space-y-6">
+      <h2 className="text-2xl font-bold text-gray-900 text-center">
+        Login to your account
+      </h2>
+
       {message && (
-        <div className="alert">
-          <p>{message}</p>
+        <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+          <p className="text-red-600">{message}</p>
         </div>
       )}
 
-      <input
-        autoComplete="on"
-        ref={emailRef}
-        type="email"
-        placeholder="Email"
-      />
-      <input
-        autoComplete="on"
-        ref={passwordRef}
-        type="password"
-        placeholder="Password"
-      />
-      <button className="btn btn-block">Login</button>
-      <p className="message">
-        <Link to="/forgot-password">Forgot password</Link>
-      </p>
-      <p className="message">
-        Not registered? <Link to="/signup">Create an account</Link>
-      </p>
+      <div className="space-y-4">
+        <div>
+          <input
+            autoComplete="on"
+            ref={emailRef}
+            type="email"
+            placeholder="Email"
+            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
+          />
+        </div>
+
+        <div>
+          <input
+            autoComplete="on"
+            ref={passwordRef}
+            type="password"
+            placeholder="Password"
+            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
+          />
+        </div>
+      </div>
+
+      <button className="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors">
+        Login
+      </button>
+
+      <div className="space-y-2">
+        <p className="text-center text-gray-600">
+          <Link
+            to="/forgot-password"
+            className="text-blue-600 hover:text-blue-700 font-medium"
+          >
+            Forgot password?
+          </Link>
+        </p>
+        <p className="text-center text-gray-600">
+          Not registered?{" "}
+          <Link
+            to="/signup"
+            className="text-blue-600 hover:text-blue-700 font-medium"
+          >
+            Create an account
+          </Link>
+        </p>
+      </div>
     </form>
   );
 }

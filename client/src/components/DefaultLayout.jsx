@@ -10,8 +10,6 @@ import { axiosAuth, axiosApi } from "../axiosClient";
 export default function DefaultLayout() {
   const { currentUser, token, setCurrentUser, setToken, notification } =
     useStateContext();
-  console.log("from layout yayy------>", currentUser);
-  console.log("from layout yayy------>", token);
 
   if (!token) {
     return <Navigate to="/login" />;
@@ -26,11 +24,6 @@ export default function DefaultLayout() {
     });
   };
 
-  //   useEffect(() => {
-  //     axiosApi.get("/users").then(({ data }) => {
-  //       setCurrentUser(data);
-  //     });
-  //   }, []);
 
   return (
     <div className="flex h-screen bg-gray-100">

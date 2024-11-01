@@ -1,28 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { axiosApi } from "../../axiosClient";
-import { Mail, Inbox as InboxIcon, Send } from "lucide-react";
+import { Mail, Inbox as InboxIcon, Send, Bell } from "lucide-react";
 import { useStateContext } from "../../contexts/ContextProvider";
-import { GoBellFill } from "react-icons/go";
 import { io } from "socket.io-client";
 
 function Inbox() {
-  const { socket } = useStateContext(); //^ socket server --------------------------------->
-  const [userData, setUserData] = useState(null);
-  const [currentUserSentEmails, setCurrentUserSentEmails] = useState(null);
-  const [currentUsserReceivedEmails, setCurrentUsserReceivedEmails] =
-    useState(null);
-  const [newEmailsCount, setNewEmailsCount] = useState(0);
+  const [emailData, setEmailData] = useState({
+    userData: null,
+    sentEmails: [],
+    receivedEmails: [],
+  });
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState("received");
   const location = useLocation();
 
   const fetchUserData = async (userId) => {
     try {
       const res = await axiosApi.get(`/users/${userId}`);
-      setUserData(res.data.user);
-      setCurrentUserSentEmails(res.data.user.sentEmails);
-      setCurrentUsserReceivedEmails(res.data.user.receivedEmails);
+      setEmailData({
+        userData: res.data.user,
+        sentEmails: res.data.user.sentEmails,
+        receivedEmails: res.data.user.receivedEmails,
+      });
       setLoading(false);
     } catch (err) {
       console.log(err);
@@ -30,38 +29,27 @@ function Inbox() {
     }
   };
 
-
+  const { currentUser } = useStateContext();
 
   useEffect(() => {
-    // Get current user
-    const currentUser = JSON.parse(localStorage.getItem("user"));
     const currentUserId = currentUser?._id;
-
-    // Connect to socket
     const socket = io(`${import.meta.env.VITE_API_BASE_URL}`, {
       transports: ["websocket"],
       reconnection: false,
-    }); // Your backend port
-
-    // Join personal room
+    });
     socket.emit("join", currentUserId);
-    console.log("Joined room:", currentUserId);
-
-    // Listen for new emails
+    // console.log("Joined room:", currentUserId);
     socket.on("send", (data) => {
-      console.log("New email received:", data);
+      // console.log("New email received:", data);
       setNewEmailsCount((prev) => prev + 1);
-      // Show browser notification
       if (Notification.permission === "granted") {
         new Notification("New Email", {
           body: `Subject: ${data.subject}`,
         });
       }
-      // Refresh emails
       fetchUserData(currentUserId);
     });
 
-    // Fetch initial data
     if (currentUserId) {
       fetchUserData(currentUserId);
     }
@@ -70,6 +58,7 @@ function Inbox() {
       socket.disconnect();
     };
   }, []);
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -77,6 +66,8 @@ function Inbox() {
       </div>
     );
   }
+
+  const { userData, sentEmails, receivedEmails } = emailData;
 
   if (!userData) {
     return (
@@ -100,9 +91,7 @@ function Inbox() {
               Email Client
             </h1>
             <div className="flex items-center gap-4">
-              <span className="text-gray-600 font-semibold">
-                Welcome, {userData.firstName}
-              </span>
+              <Bell className="w-6 h-6 text-gray-600 hover:text-indigo-600 cursor-pointer" />
             </div>
           </div>
         </div>
@@ -124,9 +113,9 @@ function Inbox() {
               >
                 <InboxIcon className="w-5 h-5" />
                 Inbox
-                {currentUsserReceivedEmails?.length > 0 && (
+                {receivedEmails?.length > 0 && (
                   <span className="ml-2 bg-white text-indigo-500 rounded-full px-2 py-1 text-xs">
-                    {currentUsserReceivedEmails.length}
+                    {receivedEmails.length}
                   </span>
                 )}
               </Link>
@@ -140,9 +129,9 @@ function Inbox() {
               >
                 <Send className="w-5 h-5" />
                 Sent
-                {currentUserSentEmails?.length > 0 && (
+                {sentEmails?.length > 0 && (
                   <span className="ml-2 bg-white text-indigo-500 rounded-full px-2 py-1 text-xs">
-                    {currentUserSentEmails.length}
+                    {sentEmails.length}
                   </span>
                 )}
               </Link>
@@ -153,8 +142,8 @@ function Inbox() {
           <div className="p-6">
             <Outlet
               context={{
-                sentEmails: currentUserSentEmails,
-                receivedEmails: currentUsserReceivedEmails,
+                sentEmails: sentEmails,
+                receivedEmails: receivedEmails,
                 userData: userData,
               }}
             />
