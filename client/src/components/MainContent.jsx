@@ -4,7 +4,7 @@ import { Outlet } from "react-router-dom";
 
 const MainContent = ({ notification }) => {
   return (
-    <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
+    <main className="flex-1 overflow-x-hidden overflow-y-auto bg-indigo-50">
       {notification && (
         <div className="bg-blue-500 text-white p-4">{notification}</div>
       )}

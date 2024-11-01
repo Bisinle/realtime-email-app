@@ -3,12 +3,13 @@ import { Link } from "react-router-dom";
 import { MdDashboard } from "react-icons/md";
 import { IoHome, IoDocument, IoSettingsSharp } from "react-icons/io5";
 import { FaPlusCircle } from "react-icons/fa";
+import logo from "../assets/logo.png";
 
 const SideBar = () => {
   return (
     <aside className="w-64 bg-indigo-700 text-white p-6">
-      <div className="mb-8">
-        <h2 className="text-2xl font-bold">Me-Mail</h2>
+      <div className="mb-8 w-full flex justify-center">
+        <img src={logo} alt="Logo" className="w-48 h-48 rounded-full" />
       </div>
       <nav className="flex flex-col gap-2 relative">
         <Link
