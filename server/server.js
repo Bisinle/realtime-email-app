@@ -56,7 +56,6 @@ app.delete("/emails/:id", emailsController.deleteEmail);
 
 io.on("connection", (socket) => {
   console.log(`User Connected: ${socket.id}`);
-  
 
   socket.on("join", (userId) => {
     console.log(`User ${userId} joining their room`);

@@ -22,20 +22,21 @@ export default function Signup() {
       password: passwordRef.current.value,
       lastName: lastName.current.value,
     };
-    const response = await axiosAuth.post("/register", payload);
-    const { user, token } = response.data;
-    console.log(response);
 
-    setCurrentUser(user);
-    setToken(token);
-    localStorage.setItem("user", JSON.stringify(user));
-    navigate("/").catch((err) => {
+    try {
+      const response = await axiosAuth.post("/register", payload);
+      const { user, token } = response.data;
+
+      setCurrentUser(user);
+      setToken(token);
+      localStorage.setItem("user", JSON.stringify(user));
+      navigate("/");
+    } catch (err) {
       const response = err.response;
       if (response && response.status === 422) {
         setErrors(response.data.errors);
       }
-    });
-    console.log(payload);
+    }
   };
 
   return (

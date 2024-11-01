@@ -29,10 +29,11 @@ export default function Login() {
       navigate("/dashboard");
     } catch (err) {
       const response = err.response;
-      if (response && response.status === 422) {
-        setMessage(response.data.message);
-      }
-    }
+      console.log(err.response.data.error);
+     
+        setMessage(err.response.data.error);}
+      
+    
   };
   return (
     <form onSubmit={onSubmit} className="space-y-6">
