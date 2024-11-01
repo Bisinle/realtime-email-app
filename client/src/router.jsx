@@ -23,7 +23,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Navigate to="/inbox/receivedEmails" />,
+        element: <Navigate to="/dashboard" />,
       },
       {
         path: "/inbox",

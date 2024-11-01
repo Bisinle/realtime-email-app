@@ -11,7 +11,7 @@ export default function GuestLayout() {
   return (
     <div className="min-h-screen bg-indigo-50 flex flex-col   items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="text-center">
-        <h1 className="text-6xl font-bold text-gray-900 mb-2">Me-Mail</h1>
+        <h1 className="text-6xl font-bold text-gray-900 mb-2">Me-Maill</h1>
         <p className="text-gray-700">Your Personal Email Assistant</p>
       </div>
       <div className="max-w-6xl w-full flex gap-8 mt-10 items-center">
