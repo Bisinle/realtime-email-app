@@ -107,7 +107,7 @@ console.log(email);
       <div className="border-t border-gray-200 p-6">
         <div className="flex justify-between items-center">
           <div className="flex items-center text-gray-600">
-            <span className="text-sm">
+            <span className={`text-sm font-semibold ${email.isRead ? "text-green-600" : "text-red-500"}`} >
               {email.isRead ? "Read" : "Unread"}
             </span>
           </div>

@@ -8,7 +8,7 @@ function NotificatinoBadge() {
 
   return (
     <>
-    <div className="bg-teal-500">
+    <div className="border-2 border-indigo-500 p rounded-full">
 
       <div className="flex items-center gap-4 relative   text-white p-2 rounded  justify-center">
         {newEmails.length === 0 ? (

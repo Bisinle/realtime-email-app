@@ -64,14 +64,35 @@ const createEmail = async (req, res) => {
 
 //^update emails Route------------------------------------------------->
 const updateEmail = async (req, res) => {
+  // const io = req.app.get("socketio");
+
+  // console.log('req body----->',req.body);
+
+  // const email = await Email.findById(req.params.id, req.body, {
+  //   new: true,
+  // });
+  // console.log(email);
+  // res.json({ email });
+
   try {
-    const updatEmail = await Email.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-    });
-    if (!updatEmail) {
+    const upadateEmail = await Email.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      {
+        new: true,
+      }
+    );
+    if (!upadateEmail) {
       return res.status(404).json({ message: "email not found" });
     }
-    res.json({ email: updatEmail });
+    // Notify each recipient
+    // const room = `user_${upadateEmail.recipients.id}`;
+    // console.log("Emitting newEmail to room:", room);
+    // io.to(room).emit("send", {
+    //   upadateEmail,
+    // });
+
+    res.json({ upadateEmail });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }

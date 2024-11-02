@@ -5,7 +5,7 @@ function NewEmails() {
     const { newEmails, setNewEmails,isNotificationOpen,setIsNotificationOpen } = useStateContext();
 
   return (
-    <div>{}</div>
+    <div>new emails</div>
   )
 }
 
