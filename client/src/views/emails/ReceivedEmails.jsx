@@ -5,30 +5,12 @@ import { BiCheckDouble } from "react-icons/bi";
 import { axiosApi } from "../../axiosClient";
 import { useStateContext } from "../../contexts/ContextProvider";
 
-function ReceivedEmails({ isRead, setIsRead }) {
-  const { receivedEmails, userData } = useOutletContext();
-  const { setNewEmails, newEmails } = useStateContext();
+function ReceivedEmails() {
+  const { receivedEmails } = useOutletContext();
+  const { setNewEmails, newEmails, handleMarkAsRead } = useStateContext();
   const navigate = useNavigate();
 
-  const handleEmailClick = async (e, emailId) => {
-    e.preventDefault(); // Prevent immediate navigation
 
-    const targetedEmail = receivedEmails.find((email) => email._id === emailId);
-    targetedEmail.isRead = true;
-    try {
-      const res = await axiosApi.put(`/emails/${emailId}`, targetedEmail);
-      const email = res.data.email;
-      const filteredNewEmails = newEmails.filter(
-        (email) => email._id !== emailId
-      );
-      setNewEmails(filteredNewEmails);
-
-      navigate(`/inbox/emailDetails/${emailId}`); // Navigate after successful update
-    } catch (error) {
-      console.error("Error marking email as read:", error);
-      navigate(`/inbox/emailDetails/${emailId}`);
-    }
-  };
 
   if (!receivedEmails?.length) {
     return (
@@ -43,7 +25,9 @@ function ReceivedEmails({ isRead, setIsRead }) {
       {receivedEmails.map((email) => (
         <Link
           to={`/inbox/emailDetails/${email._id}`}
-          onClick={(e) => handleEmailClick(e, email._id)}
+          onClick={(e) =>
+            handleMarkAsRead(e, email._id, receivedEmails, navigate)
+          }
           key={email._id}
           className={`block relative border rounded-lg p-4 transition-all duration-200 hover:shadow-md ${
             email.isRead

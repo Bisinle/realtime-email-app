@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useCallback } from "react";
 import { axiosApi } from "../axiosClient";
+import { redirect, useNavigate } from "react-router-dom";
 
 const StateContext = createContext(undefined);
 
@@ -71,6 +72,25 @@ export const ContextProvider = ({ children }) => {
     }
   };
 
+  //^handle email read reciept
+  const handleMarkAsRead = async (e, emailId, receivedEmails, navigate) => {
+    e.preventDefault(); // Prevent immediate navigation
+
+    const targetedEmail = receivedEmails.find((email) => email._id === emailId);
+    targetedEmail.isRead = true;
+    try {
+      const res = await axiosApi.put(`/emails/${emailId}`, targetedEmail);
+      const filteredNewEmails = newEmails.filter(
+        (email) => email._id !== emailId
+      );
+      setNewEmails(filteredNewEmails);
+
+      navigate(`/inbox/emailDetails/${emailId}`); // Navigate after successful update
+    } catch (error) {
+      console.error("Error marking email as read:", error);
+      navigate(`/inbox/emailDetails/${emailId}`);
+    }
+  };
   // Context value object
   const contextValue = {
     // Auth state
@@ -93,7 +113,9 @@ export const ContextProvider = ({ children }) => {
     emailData,
     setEmailData,
 
+    //read reciept and fet emails functions
     fetchUserData,
+    handleMarkAsRead,
   };
 
   return (

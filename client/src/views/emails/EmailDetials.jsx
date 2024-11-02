@@ -43,6 +43,7 @@ function EmailDetails() {
   }
 
   const isCurrentUserSender = email.sender === currentUser._id;
+console.log(email);
 
   return (
     <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-sm">
@@ -65,7 +66,7 @@ function EmailDetails() {
               {email.isRead ? (
                 <BiCheckDouble className="w-5 h-5 text-indigo-500" />
               ) : (
-                "Unread"
+                <BiCheckDouble className="w-5 h-5 text-gray-500" />
               )}
             </span>
           </div>
