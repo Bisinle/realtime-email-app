@@ -80,7 +80,7 @@ const updateEmail = async (req, res) => {
 //^ get email byID route------------------------------------------------->
 const fetchEmailById = async (req, res) => {
   try {
-    let email = await Email.findById(req.params.id);
+    let email = await Email.findById(req.params.id).sort({ createdAt: -1 });
     if (!email) {
       return res.status(404).json({ message: "email not found" });
     }

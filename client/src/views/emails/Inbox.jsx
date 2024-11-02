@@ -4,13 +4,16 @@ import { axiosApi } from "../../axiosClient";
 import { Mail, Inbox as InboxIcon, Send, Bell } from "lucide-react";
 import { useStateContext } from "../../contexts/ContextProvider";
 import { io } from "socket.io-client";
+import NotificatinoBadge from "../../components/NotificatinoBadge";
 
 function Inbox() {
-  const [emailData, setEmailData] = useState({
-    userData: null,
-    sentEmails: [],
-    receivedEmails: [],
-  });
+  // const [emailData, setEmailData] = useState({
+  //   userData: null,
+  //   sentEmails: [],
+  //   receivedEmails: [],
+  // });
+  const { newEmails, setNewEmails, currentUser, emailData, setEmailData } =
+    useStateContext();
   const [loading, setLoading] = useState(true);
   const location = useLocation();
 
@@ -22,14 +25,16 @@ function Inbox() {
         sentEmails: res.data.user.sentEmails,
         receivedEmails: res.data.user.receivedEmails,
       });
+      const unreadEmails = res.data.user.receivedEmails.filter(
+        (email) => !email.isRead
+      );
+      setNewEmails(unreadEmails); // Set new state directly instead of spreading prev
       setLoading(false);
     } catch (err) {
       console.log(err);
       setLoading(false);
     }
   };
-
-  const { currentUser } = useStateContext();
 
   useEffect(() => {
     const currentUserId = currentUser?._id;
@@ -47,7 +52,9 @@ function Inbox() {
           body: `Subject: ${data.subject}`,
         });
       }
-      fetchUserData(currentUserId);
+      if (!emailData.receivedEmails.some((email) => email._id === data._id)) {
+        fetchUserData(currentUserId);
+      }
     });
 
     if (currentUserId) {
@@ -91,16 +98,15 @@ function Inbox() {
               Email Client
             </h1>
             <div className="flex items-center gap-4">
-              <Bell className="w-6 h-6 text-gray-600 hover:text-indigo-600 cursor-pointer" />
+              <NotificatinoBadge />
+              {/* <Bell className="w-6 h-6 text-gray-600 hover:text-indigo-600 cursor-pointer" /> */}
             </div>
           </div>
         </div>
       </div>
 
-      
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="bg-white rounded-lg shadow">
-        
           <div className="border-b border-gray-200 ">
             <div className=" gap-4 p-4 flex flex-col sm:flex-row ">
               <Link
