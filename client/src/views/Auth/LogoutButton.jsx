@@ -1,8 +1,10 @@
 import React from "react";
 import { axiosAuth } from "../../axiosClient";
 import { IoIosLogOut } from "react-icons/io";
+import { useStateContext } from "../../contexts/ContextProvider";
 
 function LogoutButton() {
+  const { setCurrentUser, setToken } = useStateContext();
   const onLogout = (ev) => {
     ev.preventDefault();
     axiosAuth.post("/logout").then(() => {
