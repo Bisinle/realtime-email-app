@@ -1,9 +1,10 @@
 import React from "react";
 import { IoMenu } from "react-icons/io5";
+import LogoutButton from "../views/Auth/LogoutButton";
 
 const Header = ({
   userName,
-  onLogout,
+  
   isSidebarCollapsed,
   setIsSidebarCollapsed,
 }) => {
@@ -28,13 +29,7 @@ const Header = ({
           </h1>
         </div>
         <div className="flex items-center">
-          <button
-            onClick={onLogout}
-            className="flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-black bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
-          >
-            <span className="mr-2">🚪</span>
-            Logout
-          </button>
+          <LogoutButton />
         </div>
       </div>
     </header>

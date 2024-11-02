@@ -16,14 +16,6 @@ export default function DefaultLayout() {
     return <Navigate to="/login" />;
   }
 
-  const onLogout = (ev) => {
-    ev.preventDefault();
-    axiosAuth.post("/logout").then(() => {
-      setCurrentUser({});
-      setToken(null);
-      localStorage.removeItem("user");
-    });
-  };
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -31,7 +23,6 @@ export default function DefaultLayout() {
       <div className="z-10 flex-1 h-full overflow-y-auto focus:outline-none">
         <Header 
           userName={currentUser.firstName} 
-          onLogout={onLogout}
           isSidebarCollapsed={isSidebarCollapsed}
           setIsSidebarCollapsed={setIsSidebarCollapsed}
         />
