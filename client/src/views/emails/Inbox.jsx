@@ -41,7 +41,7 @@ function Inbox() {
     // console.log("Joined room:", currentUserId);
     socket.on("send", (data) => {
       // console.log("New email received:", data);
-      setNewEmailsCount((prev) => prev + 1);
+      // setNewEmailsCount((prev) => prev + 1);
       if (Notification.permission === "granted") {
         new Notification("New Email", {
           body: `Subject: ${data.subject}`,
@@ -97,15 +97,15 @@ function Inbox() {
         </div>
       </div>
 
-      {/*//^ Main Content */}
+      
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="bg-white rounded-lg shadow">
-          {/*//^  Navigation Tabs */}
-          <div className="border-b border-gray-200">
-            <div className="flex gap-4 p-4">
+        
+          <div className="border-b border-gray-200 ">
+            <div className=" gap-4 p-4 flex flex-col sm:flex-row ">
               <Link
                 to="receivedEmails"
-                className={`flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-colors ${
+                className={` flex  justify-center sm:flex shadow-md border items-center gap-2 px-6 py-3 rounded-lg font-medium transition-colors ${
                   location.pathname.includes("receivedEmails")
                     ? "bg-indigo-500 text-white"
                     : "text-gray-600 hover:bg-gray-100"
@@ -121,7 +121,7 @@ function Inbox() {
               </Link>
               <Link
                 to="sentEmails"
-                className={`flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-colors ${
+                className={`flex  justify-center sm:flex shadow-md border items-center gap-2 px-6 py-3 rounded-lg font-medium transition-colors ${
                   location.pathname.includes("sentEmails")
                     ? "bg-indigo-500 text-white"
                     : "text-gray-600 hover:bg-gray-100"

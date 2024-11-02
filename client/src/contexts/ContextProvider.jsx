@@ -8,6 +8,16 @@ export const ContextProvider = ({ children }) => {
     return savedUser ? JSON.parse(savedUser) : null;
   });
 
+
+  //^ email related states
+  const [newEmails, setNewEmails] = useState([]);
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+  const [emailData, setEmailData] = useState({
+    userData: null,
+    sentEmails: [],
+    receivedEmails: [],
+  });
+
   const [token, setToken] = useState(
     () => localStorage.getItem("ACCESS_TOKEN") || null
   );
@@ -56,6 +66,13 @@ export const ContextProvider = ({ children }) => {
     showNotification,
     loading,
     setLoading,
+
+    //for the email notification
+    newEmails,
+    setNewEmails,
+    isNotificationOpen,
+    setIsNotificationOpen,
+    emailData, setEmailData
   };
 
   return (

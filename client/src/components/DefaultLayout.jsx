@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import { Navigate } from "react-router-dom";
 import { useStateContext } from "../contexts/ContextProvider";
 import SideBar from "./SideBar";
@@ -10,6 +10,7 @@ import { axiosAuth, axiosApi } from "../axiosClient";
 export default function DefaultLayout() {
   const { currentUser, token, setCurrentUser, setToken, notification } =
     useStateContext();
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
   if (!token) {
     return <Navigate to="/login" />;
@@ -24,12 +25,16 @@ export default function DefaultLayout() {
     });
   };
 
-
   return (
     <div className="flex h-screen bg-gray-100">
-      <SideBar />
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <Header userName={currentUser.firstName} onLogout={onLogout} />
+      <SideBar isCollapsed={isSidebarCollapsed} setIsCollapsed={setIsSidebarCollapsed} />
+      <div className="z-10 flex-1 h-full overflow-y-auto focus:outline-none">
+        <Header 
+          userName={currentUser.firstName} 
+          onLogout={onLogout}
+          isSidebarCollapsed={isSidebarCollapsed}
+          setIsSidebarCollapsed={setIsSidebarCollapsed}
+        />
         <MainContent notification={notification} />
       </div>
     </div>
