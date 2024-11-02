@@ -1,44 +1,50 @@
 import React from "react";
 import { useStateContext } from "../../contexts/ContextProvider";
-import { Link } from "react-router-dom";
-import { Circle, Clock, User } from "lucide-react";
-import { BiCheckDouble } from "react-icons/bi";
+import { Link, useNavigate } from "react-router-dom";
+import { User } from "lucide-react";
 
-function NewEmails({ email }) {
+function NewEmails({ email, setIsNotificationOpen }) {
+  const { handleMarkAsRead } = useStateContext();
+  const navigate = useNavigate();
+
   return (
     <Link
       to={`/inbox/emailDetails/${email._id}`}
-      onClick={(e) => handleEmailClick(e, email._id)}
+      onClick={(e) => handleMarkAsRead(e, email._id, navigate)}
       key={email._id}
-      className={`block relative border rounded-lg p-4 transition-all duration-200 hover:shadow-md ${
-        email.isRead
-          ? "bg-white hover:bg-gray-50"
-          : "bg-blue-50 hover:bg-blue-100"
-      }`}
+      className={`block relative border rounded-lg p-1.5 transition-all duration-200 
+        hover:shadow-md transform hover:-translate-y-0.5
+        ${
+          email.isRead
+            ? "bg-white hover:bg-gray-50"
+            : "bg-blue-50 hover:bg-blue-100"
+        }`}
     >
-    
-          <div className="text-sm text-gray-600 flex items-center gap-2">
-            <span className="font-medium text-black">From: </span>
-            <div className="flex items-center gap-1.5">
-              <User className="w-4 h-4 text-black" />
-              <span className="truncate max-w-[200px] text-black">
-                {email.sender.name}
-              </span>
+      <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1.5 flex-1">
+          <span className="font-semibold text-xs text-black">From: </span>
+          <div className="flex items-center gap-1">
+            <div className="bg-gray-100 p-1 rounded-full">
+              <User className="w-3 h-3 text-black" />
             </div>
+            <span className="truncate max-w-[180px] text-black text-xs font-medium">
+              {email.sender.name}
+            </span>
           </div>
-       
+        </div>
 
-        <p
-          className={`text-gray-500 line-clamp-2 ${
-            email.isRead ? "font-normal" : "font-medium"
-          }`}
-        >
-          {email.body}
-        </p>
- 
+        {!email.isRead && (
+          <span className="w-1.5 h-1.5 bg-blue-500 rounded-full flex-shrink-0" />
+        )}
+      </div>
 
-      {/* Hover Effect */}
-      <div className="absolute inset-0 border border-transparent hover:border-blue-300 rounded-lg transition-colors duration-200 pointer-events-none" />
+      <p
+        className={`text-gray-500 text-xs line-clamp-2 mt-0.5
+          ${email.isRead ? "font-normal" : "font-medium"}
+        `}
+      >
+        {email.body}
+      </p>
     </Link>
   );
 }

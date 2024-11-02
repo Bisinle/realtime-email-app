@@ -23,6 +23,7 @@ export const ContextProvider = ({ children }) => {
     () => localStorage.getItem("ACCESS_TOKEN") || null
   );
 
+  const [isBadgeOpen, setIsBadgeOpen] = useState(false);
   const [notification, setNotification] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -73,10 +74,12 @@ export const ContextProvider = ({ children }) => {
   };
 
   //^handle email read reciept
-  const handleMarkAsRead = async (e, emailId, receivedEmails, navigate) => {
+  const handleMarkAsRead = async (e, emailId, navigate) => {
     e.preventDefault(); // Prevent immediate navigation
 
-    const targetedEmail = receivedEmails.find((email) => email._id === emailId);
+    const targetedEmail = emailData.receivedEmails.find(
+      (email) => email._id === emailId
+    );
     targetedEmail.isRead = true;
     try {
       const res = await axiosApi.put(`/emails/${emailId}`, targetedEmail);
@@ -84,6 +87,7 @@ export const ContextProvider = ({ children }) => {
         (email) => email._id !== emailId
       );
       setNewEmails(filteredNewEmails);
+      setIsBadgeOpen(false);
 
       navigate(`/inbox/emailDetails/${emailId}`); // Navigate after successful update
     } catch (error) {
@@ -98,6 +102,8 @@ export const ContextProvider = ({ children }) => {
     setCurrentUser: updateCurrentUser,
     token,
     setToken: setTokenAndStorage,
+    isBadgeOpen,
+    setIsBadgeOpen,
 
     // UI state
     notification,

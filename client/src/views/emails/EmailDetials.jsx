@@ -43,7 +43,6 @@ function EmailDetails() {
   }
 
   const isCurrentUserSender = email.sender === currentUser._id;
-console.log(email);
 
   return (
     <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-sm">

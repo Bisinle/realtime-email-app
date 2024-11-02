@@ -4,15 +4,14 @@ import { useStateContext } from "../contexts/ContextProvider";
 import NewEmails from "../views/emails/NewEmails";
 
 function NotificationBadge() {
-  const { newEmails, setNewEmails } = useStateContext();
-  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+  const { newEmails, setNewEmails, isBadgeOpen, setIsBadgeOpen } = useStateContext();
   const dropdownRef = useRef(null);
 
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsNotificationOpen(false);
+        setIsBadgeOpen(false);
       }
     };
 
@@ -27,7 +26,7 @@ function NotificationBadge() {
   return (
     <div className="relative" ref={dropdownRef}>
       <button
-        onClick={() => setIsNotificationOpen(!isNotificationOpen)}
+        onClick={() => setIsBadgeOpen(!isBadgeOpen)}
         className="relative group flex items-center justify-center w-10 h-10 rounded-full 
                    bg-white shadow-sm border border-gray-200 hover:bg-gray-50 
                    transition-all duration-200 hover:shadow-md"
@@ -61,7 +60,7 @@ function NotificationBadge() {
       />
 
       {/* Notification Dropdown */}
-      {isNotificationOpen && (
+      {isBadgeOpen && (
         <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
           <div className="p-4 border-b border-gray-200">
             <h3 className="text-lg font-semibold text-gray-900">
@@ -83,23 +82,13 @@ function NotificationBadge() {
                   <NewEmails
                     key={email.id}
                     email={email}
-                    handleMarkAsRead={handleMarkAsRead}
                   />
                 ))}
               </div>
             )}
           </div>
 
-          {newEmails.length > 0 && (
-            <div className="p-4 border-t border-gray-200">
-              <button
-                onClick={() => setNewEmails([])}
-                className="w-full text-center text-sm text-indigo-600 hover:text-indigo-800"
-              >
-                Mark all as read
-              </button>
-            </div>
-          )}
+          
         </div>
       )}
     </div>
