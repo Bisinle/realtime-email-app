@@ -1,35 +1,26 @@
+//^ taken a while to have the socket functionality and  dont wanna refactor and mess it up
+//^ will use the as a reference for later apps
+
 import React, { useEffect, useState } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { axiosApi } from "../../axiosClient";
-import { Mail, Inbox as InboxIcon, Send, Bell } from "lucide-react";
+import { Mail, Inbox as InboxIcon, Send } from "lucide-react";
 import { useStateContext } from "../../contexts/ContextProvider";
 import { io } from "socket.io-client";
 import NotificatinoBadge from "../../components/NotificatinoBadge";
 
 function Inbox() {
-  const { newEmails, setNewEmails, currentUser, emailData, setEmailData } =
-    useStateContext();
-  const [loading, setLoading] = useState(true);
+  const {
+    setNewEmails,
+    currentUser,
+    emailData,
+    setEmailData,
+    unreadEmails,
+    fetchUserData,
+    loading,
+    setLoading,
+  } = useStateContext();
   const location = useLocation();
-
-  const fetchUserData = async (userId) => {
-    try {
-      const res = await axiosApi.get(`/users/${userId}`);
-      setEmailData({
-        userData: res.data.user,
-        sentEmails: res.data.user.sentEmails,
-        receivedEmails: res.data.user.receivedEmails,
-      });
-      const unreadEmails = res.data.user.receivedEmails.filter(
-        (email) => !email.isRead
-      );
-      setNewEmails(unreadEmails);
-      setLoading(false);
-    } catch (err) {
-      console.log(err);
-      setLoading(false);
-    }
-  };
 
   useEffect(() => {
     const currentUserId = currentUser?._id;
@@ -37,8 +28,13 @@ function Inbox() {
       transports: ["websocket"],
       reconnection: false,
     });
+
     socket.emit("join", currentUserId);
+
+    // Handle new emails
     socket.on("send", (data) => {
+      // console.log(data);
+
       if (Notification.permission === "granted") {
         new Notification("New Email", {
           body: `Subject: ${data.subject}`,
@@ -46,11 +42,33 @@ function Inbox() {
       }
       if (!emailData.receivedEmails.some((email) => email._id === data._id)) {
         fetchUserData(currentUserId);
+        setLoading(false);
+      }
+    });
+
+    // Handle read receipts
+    socket.on("email_read", (data) => {
+      // console.log(data);
+      setEmailData((prevData) => ({
+        ...prevData,
+        sentEmails: prevData.sentEmails.map((email) =>
+          email._id === data.emailId
+            ? { ...email, isRead: true, readAt: data.readAt }
+            : email
+        ),
+      }));
+
+      // Optional: Show notification that email was read
+      if (Notification.permission === "granted") {
+        new Notification("Email Read", {
+          body: `Your email "${data.subject}" was read`,
+        });
       }
     });
 
     if (currentUserId) {
       fetchUserData(currentUserId);
+      setLoading(false);
     }
 
     return () => {
@@ -58,23 +76,12 @@ function Inbox() {
     };
   }, []);
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-      </div>
-    );
-  }
-
   const { userData, sentEmails, receivedEmails } = emailData;
 
   if (!userData) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <p className="text-gray-500 flex items-center gap-2">
-          <Mail className="w-5 h-5" />
-          No emails found
-        </p>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
       </div>
     );
   }

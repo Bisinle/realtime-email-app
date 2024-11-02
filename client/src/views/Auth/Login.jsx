@@ -1,4 +1,4 @@
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { axiosAuth } from "../../axiosClient.jsx";
 import { useForm } from "react-hook-form";
 import { createRef } from "react";
@@ -7,9 +7,8 @@ import { useState } from "react";
 
 export default function Login() {
   const navigate = useNavigate();
-  const emailRef = createRef();
-  const passwordRef = createRef();
-  const { setCurrentUser, setToken } = useStateContext();
+  const { setCurrentUser, setToken, unreadEmailsCount, setUnreadEmailsCount } =
+    useStateContext();
   const [message, setMessage] = useState(null);
 
   const {
@@ -24,18 +23,16 @@ export default function Login() {
   });
 
   const onSubmit = async (credentials) => {
-
-
     try {
       const response = await axiosAuth.post("/login", credentials);
       const { user, token } = response.data;
-      // localStorage.setItem("user", JSON.stringify(user));
       setCurrentUser(user);
       setToken(token);
+
+      setUnreadEmailsCount(true);
       navigate("/dashboard");
     } catch (err) {
       const response = err.response;
-      console.log(err.response.data.error);
 
       setMessage(err.response.data.error);
     }
@@ -66,7 +63,9 @@ export default function Login() {
             className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
           />
           {errors.email && (
-            <p className="text-red-500 font-semibold">{errors.email?.message}</p>
+            <p className="text-red-500 font-semibold">
+              {errors.email?.message}
+            </p>
           )}
         </div>
 
@@ -78,8 +77,10 @@ export default function Login() {
             placeholder="Password"
             className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
           />
-           {errors.password && (
-            <p className="text-red-500 font-semibold">{errors.password?.message}</p>
+          {errors.password && (
+            <p className="text-red-500 font-semibold">
+              {errors.password?.message}
+            </p>
           )}
         </div>
       </div>

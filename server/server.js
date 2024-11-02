@@ -87,6 +87,26 @@ changeStream.on("change", (change) => {
     const email = change.fullDocument;
     //* console.log(email, "new console log");
     io.to(`user_${email.recipient}`).emit("send", email);
+  } else if (change.operationType === "update") {
+    // Check if the isRead field was modified
+    if (change.updateDescription.updatedFields?.isRead === true) {
+      const emailId = change.documentKey._id;
+
+      // Fetch the complete email document to get sender information
+      emailModel
+        .findById(emailId)
+        .then((email) => {
+          if (email && email.sender) {
+            // Emit to sender's room that their email was read
+            io.to(`user_${email.sender}`).emit("email_read", {
+              emailId: emailId,
+              readAt: new Date(),
+              subject: email.subject,
+            });
+          }
+        })
+        .catch((err) => console.error("Error fetching email details:", err));
+    }
   }
 });
 

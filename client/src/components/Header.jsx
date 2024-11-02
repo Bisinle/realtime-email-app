@@ -5,7 +5,7 @@ import NotificatinoBadge from "./NotificatinoBadge";
 
 const Header = ({
   userName,
-  
+
   isSidebarCollapsed,
   setIsSidebarCollapsed,
 }) => {
@@ -30,6 +30,7 @@ const Header = ({
           </h1>
         </div>
         <div className="flex items-center  gap-5">
+          <NotificatinoBadge />
           <LogoutButton />
         </div>
       </div>

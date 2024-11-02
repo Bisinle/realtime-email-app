@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useCallback } from "react";
+import { axiosApi } from "../axiosClient";
 
 const StateContext = createContext(undefined);
 
@@ -10,7 +11,7 @@ export const ContextProvider = ({ children }) => {
 
   //^ email related states
   const [newEmails, setNewEmails] = useState([]);
-  const [loadNotifications, setLoadNotifications] = useState(false);
+  const [unreadEmailsCount, setUnreadEmailsCount] = useState(false);
   const [emailData, setEmailData] = useState({
     userData: null,
     sentEmails: [],
@@ -52,8 +53,24 @@ export const ContextProvider = ({ children }) => {
     return () => clearTimeout(timer);
   }, []);
 
+  const fetchUserData = async (userId) => {
+    try {
+      const res = await axiosApi.get(`/users/${userId}`);
+      setEmailData({
+        userData: res.data.user,
+        sentEmails: res.data.user.sentEmails,
+        receivedEmails: res.data.user.receivedEmails,
+      });
+      setLoading(false);
+      const unreadEmails = res.data.user.receivedEmails.filter(
+        (email) => !email.isRead
+      );
+      setNewEmails(unreadEmails);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
-  
   // Context value object
   const contextValue = {
     // Auth state
@@ -71,10 +88,12 @@ export const ContextProvider = ({ children }) => {
     //for the email notification
     newEmails,
     setNewEmails,
-    loadNotifications,
-    setLoadNotifications,
+    unreadEmailsCount,
+    setUnreadEmailsCount,
     emailData,
     setEmailData,
+
+    fetchUserData,
   };
 
   return (
