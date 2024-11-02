@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { axiosApi } from "../../axiosClient";
 import { ArrowLeft, Clock, Mail, User } from "lucide-react";
+import { BiCheckDouble } from "react-icons/bi";
 
 function EmailDetails() {
   const [email, setEmail] = useState(null);
@@ -21,7 +22,6 @@ function EmailDetails() {
         setLoading(false);
       }
     };
-console.log(email);
 
     fetchEmailDetails();
   }, [id]);
@@ -48,14 +48,27 @@ console.log(email);
     <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-sm">
       {/* Header */}
       <div className="border-b border-gray-200">
-        <div className="p-6">
-          <button
-            onClick={() => navigate(-1)}
-            className="flex items-center text-indigo-600 hover:text-indigo-800 mb-4"
-          >
-            <ArrowLeft className="w-5 h-5 mr-2" />
-            Back
-          </button>
+        <div className="p-6 fle">
+          <div className="flex justify-between items-center text-gray-600">
+            <button
+              onClick={() => navigate(-1)}
+              className="flex items-center text-indigo-600 hover:text-indigo-800 mb-4"
+            >
+              <ArrowLeft className="w-5 h-5 mr-2" />
+              Back
+            </button>
+            <span
+              className={`text-sm font-semibold border rounded-full px-3 bg-gray-100 text-white ${
+                email.isRead ? "text-green-600" : "text-red-500"
+              }`}
+            >
+              {email.isRead ? (
+                <BiCheckDouble className="w-5 h-5 text-indigo-500" />
+              ) : (
+                "Unread"
+              )}
+            </span>
+          </div>
 
           <h1 className="text-2xl font-bold text-gray-900 mb-4">
             {email.subject}
@@ -76,9 +89,7 @@ console.log(email);
               <Mail className="w-5 h-5 mr-3 text-indigo-500" />
               <span className="font-medium mr-2"> To:</span>
               <span className="text-gray-800">
-                {isCurrentUserSender 
-                  ? "To"
-                  : email.sender.firstName}
+                {isCurrentUserSender ? "To" : email.sender.firstName}
               </span>
             </div>
 
@@ -106,11 +117,6 @@ console.log(email);
       {/* Footer */}
       <div className="border-t border-gray-200 p-6">
         <div className="flex justify-between items-center">
-          <div className="flex items-center text-gray-600">
-            <span className={`text-sm font-semibold ${email.isRead ? "text-green-600" : "text-red-500"}`} >
-              {email.isRead ? "Read" : "Unread"}
-            </span>
-          </div>
           <div className="flex gap-4">
             <button
               onClick={() => navigate(-1)}

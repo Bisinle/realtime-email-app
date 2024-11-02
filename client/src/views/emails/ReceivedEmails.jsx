@@ -1,6 +1,7 @@
 import React from "react";
 import { Link, useOutletContext, useNavigate } from "react-router-dom";
 import { Clock, User, Circle, Mail, MailOpen } from "lucide-react";
+import { BiCheckDouble } from "react-icons/bi";
 import { axiosApi } from "../../axiosClient";
 import { useStateContext } from "../../contexts/ContextProvider";
 
@@ -17,7 +18,6 @@ function ReceivedEmails({ isRead, setIsRead }) {
     try {
       const res = await axiosApi.put(`/emails/${emailId}`, targetedEmail);
       const email = res.data.email;
-      console.log(email);
       const filteredNewEmails = newEmails.filter(
         (email) => email._id !== emailId
       );
@@ -26,7 +26,6 @@ function ReceivedEmails({ isRead, setIsRead }) {
       navigate(`/inbox/emailDetails/${emailId}`); // Navigate after successful update
     } catch (error) {
       console.error("Error marking email as read:", error);
-      // Still navigate even if marking as read fails
       navigate(`/inbox/emailDetails/${emailId}`);
     }
   };
@@ -55,7 +54,7 @@ function ReceivedEmails({ isRead, setIsRead }) {
           {/* Read Status Indicator */}
           <div className="absolute left-4 top-1/2 -translate-y-1/2">
             {email.isRead ? (
-              <MailOpen className="w-5 h-5 text-gray-400" />
+              <BiCheckDouble className="w-5 h-5 text-indigo-500" />
             ) : (
               <Circle className="w-4 h-4 fill-blue-600 text-blue-600" />
             )}

@@ -7,12 +7,7 @@ import { io } from "socket.io-client";
 import NotificatinoBadge from "../../components/NotificatinoBadge";
 
 function Inbox() {
-  // const [emailData, setEmailData] = useState({
-  //   userData: null,
-  //   sentEmails: [],
-  //   receivedEmails: [],
-  // });
-  const { setNewEmails, currentUser, emailData, setEmailData } =
+  const { newEmails, setNewEmails, currentUser, emailData, setEmailData } =
     useStateContext();
   const [loading, setLoading] = useState(true);
   const location = useLocation();
@@ -28,7 +23,7 @@ function Inbox() {
       const unreadEmails = res.data.user.receivedEmails.filter(
         (email) => !email.isRead
       );
-      setNewEmails(unreadEmails); // Set new state directly instead of spreading prev
+      setNewEmails(unreadEmails);
       setLoading(false);
     } catch (err) {
       console.log(err);
@@ -43,10 +38,7 @@ function Inbox() {
       reconnection: false,
     });
     socket.emit("join", currentUserId);
-    // console.log("Joined room:", currentUserId);
     socket.on("send", (data) => {
-      // console.log("New email received:", data);
-      // setNewEmailsCount((prev) => prev + 1);
       if (Notification.permission === "granted") {
         new Notification("New Email", {
           body: `Subject: ${data.subject}`,
@@ -98,8 +90,7 @@ function Inbox() {
               Email Client
             </h1>
             <div className="flex items-center gap-4">
-              <NotificatinoBadge  />
-              {/* <Bell className="w-6 h-6 text-gray-600 hover:text-indigo-600 cursor-pointer" /> */}
+              <NotificatinoBadge />
             </div>
           </div>
         </div>

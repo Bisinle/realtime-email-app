@@ -52,6 +52,8 @@ export const ContextProvider = ({ children }) => {
     return () => clearTimeout(timer);
   }, []);
 
+
+  
   // Context value object
   const contextValue = {
     // Auth state
