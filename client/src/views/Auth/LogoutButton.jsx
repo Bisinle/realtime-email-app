@@ -17,9 +17,9 @@ function LogoutButton() {
   return (
     <button
       onClick={onLogout}
-      className="flex justify-center items-center gap-2 bg-indigo-500 px-2 py-1 rounded-lg text-white hover:bg-indigo-600"
+      className="flex justify-center items-center gap-2   bg-indigo-500 px-2 py-1 rounded-lg text-white hover:bg-indigo-600"
     >
-      <IoIosLogOut className="text-2xl" />
+      <IoIosLogOut className="text-white text-4xl font-bold h-5 w-5" />
     </button>
   );
 }

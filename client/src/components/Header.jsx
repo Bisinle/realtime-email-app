@@ -1,6 +1,7 @@
 import React from "react";
 import { IoMenu } from "react-icons/io5";
 import LogoutButton from "../views/Auth/LogoutButton";
+import NotificatinoBadge from "./NotificatinoBadge";
 
 const Header = ({
   userName,
@@ -28,7 +29,7 @@ const Header = ({
             </span>
           </h1>
         </div>
-        <div className="flex items-center">
+        <div className="flex items-center  gap-5">
           <LogoutButton />
         </div>
       </div>

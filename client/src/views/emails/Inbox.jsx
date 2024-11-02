@@ -12,7 +12,7 @@ function Inbox() {
   //   sentEmails: [],
   //   receivedEmails: [],
   // });
-  const { newEmails, setNewEmails, currentUser, emailData, setEmailData } =
+  const { setNewEmails, currentUser, emailData, setEmailData } =
     useStateContext();
   const [loading, setLoading] = useState(true);
   const location = useLocation();
@@ -98,7 +98,7 @@ function Inbox() {
               Email Client
             </h1>
             <div className="flex items-center gap-4">
-              <NotificatinoBadge />
+              <NotificatinoBadge  />
               {/* <Bell className="w-6 h-6 text-gray-600 hover:text-indigo-600 cursor-pointer" /> */}
             </div>
           </div>
@@ -112,7 +112,7 @@ function Inbox() {
               <Link
                 to="receivedEmails"
                 className={` flex  justify-center sm:flex shadow-md border items-center gap-2 px-6 py-3 rounded-lg font-medium transition-colors ${
-                  location.pathname.includes("receivedEmails") 
+                  location.pathname.includes("receivedEmails")
                     ? "bg-indigo-500 text-white"
                     : "text-gray-600 hover:bg-gray-100"
                 }`}
@@ -128,7 +128,7 @@ function Inbox() {
               <Link
                 to="sentEmails"
                 className={`flex  justify-center sm:flex shadow-md border items-center gap-2 px-6 py-3 rounded-lg font-medium transition-colors ${
-                  location.pathname.includes("sentEmails") 
+                  location.pathname.includes("sentEmails")
                     ? "bg-indigo-500 text-white"
                     : "text-gray-600 hover:bg-gray-100"
                 }`}

@@ -8,10 +8,9 @@ export const ContextProvider = ({ children }) => {
     return savedUser ? JSON.parse(savedUser) : null;
   });
 
-
   //^ email related states
   const [newEmails, setNewEmails] = useState([]);
-  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+  const [loadNotifications, setLoadNotifications] = useState(false);
   const [emailData, setEmailData] = useState({
     userData: null,
     sentEmails: [],
@@ -70,9 +69,10 @@ export const ContextProvider = ({ children }) => {
     //for the email notification
     newEmails,
     setNewEmails,
-    isNotificationOpen,
-    setIsNotificationOpen,
-    emailData, setEmailData
+    loadNotifications,
+    setLoadNotifications,
+    emailData,
+    setEmailData,
   };
 
   return (

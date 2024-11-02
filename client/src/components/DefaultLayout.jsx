@@ -8,7 +8,7 @@ import { de } from "date-fns/locale";
 import { axiosAuth, axiosApi } from "../axiosClient";
 
 export default function DefaultLayout() {
-  const { currentUser, token, setCurrentUser, setToken, notification } =
+  const { currentUser, token,  notification } =
     useStateContext();
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
